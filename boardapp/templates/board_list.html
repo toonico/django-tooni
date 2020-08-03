@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+
+{% block title %}{{ board_category.category_name }} 리스트{% endblock %}
+
+{% block script %}
+{% endblock %}
+
+
+{% block content %}
+{% if board_category.category_code == "webtoon" %}
+	<div class = "catemenu">
+	{% load static %}<SCRIPT src="{% static 'boardapp/assets/js/mymenu.js' %}" ></SCRIPT>
+				<h3>학교찾기</h3>
+				<ul>
+					<li class = "menu">서울 (ㄱ~ㄹ) {% load static %}<a><img src="{% static 'boardapp/assets/images/down_for_menu.png' %}" ></a>
+						<ul class = "submenu"><br>
+							{% for schools in school %}
+								{% if schools.school_region == "서울" %}
+									{% if schools.school_id == "ㄱ" or schools.school_id == "ㄴ" or schools.school_id == "ㄷ" or schools.school_id == "ㄹ" %}
+										<li>{{ schools.school_name }}</li>
+									{% endif %}
+								{% endif %}
+								{% endfor %}
+						</ul><br>
+					</li>
+					<li class = "menu">서울 (ㅁ~ㅅ) {% load static %}<a><img src="{% static 'boardapp/assets/images/down_for_menu.png' %}" ></a>
+						<ul class = "submenu"><br>
+							{% for schools in school %}
+								{% if schools.school_region == "서울" %}
+									{% if schools.school_id == "ㅁ" or schools.school_id == "ㅂ" or schools.school_id == "ㅅ" %}
+										<li>{{ schools.school_name }}</li>
+									{% endif %}
+								{% endif %}
+							{% endfor %}
+						</ul><br>
+					</li>
+					<li class = "menu">서울 (ㅇ~ㅎ) {% load static %}<a><img src="{% static 'boardapp/assets/images/down_for_menu.png' %}" ></a>
+						<ul class = "submenu"><br>
+							{% for schools in school %}
+								{% if schools.school_region == "서울" %}
+									{% if schools.school_id == "ㅇ" or schools.school_id == "ㅈ" or schools.school_id == "ㅊ" or schools.school_id == "ㅋ" or schools.school_id == "ㅌ" or schools.school_id == "ㅍ" or schools.school_id == "ㅎ"  %}
+										<li>{{ schools.school_name }}</li>
+									{% endif %}
+								{% endif %}
+							{% endfor %}
+						</ul><br>
+					</li>
+					<li class = "menu">경기 지역 {% load static %}<a><img src="{% static 'boardapp/assets/images/down_for_menu.png' %}" ></a>
+						<ul class = "submenu"><br>
+							{% for schools in school %}
+								{% if schools.school_region == "경기" %}
+									<li>{{ schools.school_name }}</li>
+								{% endif %}
+							{% endfor %}
+						</ul><br>
+					<li class = "menu">인천 지역 {% load static %}<a><img src="{% static 'boardapp/assets/images/down_for_menu.png' %}" ></a>
+						<ul class = "submenu"><br>
+							{% for schools in school %}
+								{% if schools.school_region == "인천"  %}
+									<li>{{ schools.school_name }}</li>
+								{% endif %}
+							{% endfor %}
+						</ul><br>
+						</li>
+					<li class = "menu">전남 지역 {% load static %}<a><img src="{% static 'boardapp/assets/images/down_for_menu.png' %}" ></a>
+						<ul class = "submenu"><br>
+							{% for schools in school %}
+								{% if schools.school_region == "전남"  %}
+									<li>{{ schools.school_name }}</li>
+								{% endif %}
+							{% endfor %}
+						</ul><br>
+						</li>
+				</ul>
+			</div>
+{% endif %}
+{% if board_category.category_code == "bookintro" %}
+		<div class = "bookintro" >
+					<div class="row">
+						<div class="col-12"><h2>{{ board_category.category_name }}</h2></div>
+					</div>
+					<div class="row">
+						<div class="col-12"><h4>{{ board_category.category_desc }}</h4></div>
+					</div>
+			<br>
+			{% for article in articles %}
+				<div class = "row ml-1">
+					{% if article.image %}
+						<img src="{{ article.image.url }}" width = "250", height = "330"/>
+					{% else %}
+					 	{% load static %} <img src="{% static 'boardapp/assets/images/No_image.png' %}" width="250" , height="160"/>
+					{% endif %}
+					<div class="content">
+						<p class="content-box ml-4">{{ article.title }}&nbsp <br>{{ article.user.last_name }} |&nbsp {{ article.bookdata }}</p><hr color = "black" width = "92%">
+						<p class="content-box ml-4">{{ article.content }} </p>
+					</div>
+				</div>
+				<hr>
+				{% empty %}
+				<div class="row margin-10 center">
+				현재 등록된 게시물이 없습니다.
+				</div>
+				{% endfor %}
+
+			{% if user.username  and user.is_superuser  %}
+				<h5><a class = "link-a" href="{% url 'boardwrite' board_category.category_code %}">글쓰기</a></h5>
+			{% endif %}
+		</div>
+	<div class = "webtoon">
+	{% elif board_category.category_code == "webtoon" %}
+			<div class="row block-center board margin-top-10">
+			<div class = "mainboard ml-5 pdl-5">
+				<div class="col-12"><h5>{{ board_category.category_name }}</h5></div>
+				<div class="col-12"><h6>{{ board_category.category_desc }}</h6></div>
+				<hr>
+				{% for article in articles %}
+					{% if article.category.category_code == "webtoon" %}
+						 <div class="my-block">
+							{% if article.image %}
+							 <a href="{% url 'boardview' article.id %}"><img src="{{ article.image_thumbnail.url }}" /></a>
+							 {% else %}
+							 <a href="{% url 'boardview' article.id %}"> {% load static %} <img src="{% static 'boardapp/assets/images/No_image.png' %}" width="273" , height="300"/></a>
+							 {% endif %}
+							 <br>
+							 <a class = "link-a" href="{% url 'boardview' article.id %}"><p class = "mt-2" >
+								 {{ article.title }}<br>
+								 {{ article.user.last_name }} </a> | {{ article.registered_date|date:"Y-m-d" }}
+							 </p></div>
+						  {% endif %}
+				{% empty %}
+					<div class="row margin-10 center">
+					현재 등록된 게시물이 없습니다.
+					</div>
+				{% endfor %}
+				</div>
+			</div>
+
+				<div class="row">
+					<div class="col-12 margin-10 center">
+						{% if articles.has_previous %}
+						<span>
+							<a class = "link-a" href="?page=1">&laquo; 처음</a>
+							<a class = "link-a" href="?page={{ articles.previous_page_number }}">이전</a>
+						{% endif %}
+
+						{% for page in page_list %}
+							{% if page == articles.number %}
+							<my class ="a" style="font-weight : bold;">{{ page }}</my>
+							{% else %}
+								<a class = "link-a" href="?page={{ page}}">{{ page }}</a>
+							{% endif %}
+						{% endfor %}
+
+						{% if articles.has_next %}
+							<a class = "link-a" href="?page={{ articles.next_page_number }}">다음</a>
+							<a class = "link-a" href="?page={{ articles.paginator.num_pages }}">마지막 &raquo;</a>
+						{% endif %}
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 margin-10 center">
+					<form class="form-inline" action="" method="get">
+						{%csrf_token%}
+						<div class="serching-group">
+							<select name="fd_name" id="" class="form-control">
+								<option value="title">제목</option>
+								<option value="content">본문 내용</option>
+								<option value="user__last_name">작성자</option>
+							</select>
+							<input type="text" class="form-control" name='q'>
+							<button class="btn btn-secondary" type="submit">검색</button>
+						</div>
+					</form>
+					</div>
+				</div>
+		</div>
+	{% else %}
+		<div class="row block-center board">
+			<div class="col-11">
+				{% if board_category.category_name %}
+					<div class="row">
+						<div class="col-12"><h5>{{ board_category.category_name }}</h5></div>
+					</div>
+					<div class="row">
+						<div class="col-12"><h6>{{ board_category.category_desc }}</h6></div>
+					</div>
+				<hr><br>
+					<div class="row">
+						<div class="list-title col-1"><p>No.</p></div>
+						<div class="list-title col-5"><p>제목</p></div>
+						<div class="list-title col-2"><p>등록자</p></div>
+						<div class="list-title col-2"><p>등록일</p></div>
+						<div class="list-title col-1"><p>조회</p></div>
+						<div class="list-title col-1"><p>추천</p></div>
+					</div>
+					{% for article in articles %}
+					<div class="row">
+						<div class="list-contents col-1"><p>{{ article.id }}</p></div>
+						<div class="list-contents-title col-5"><p>
+							<a class = "link-a" href="{% url 'boardview' article.id %}">
+								{{ article.title }}
+								{% if article.reply_count > 0 %}
+								[{{ article.reply_count }}]
+								{% endif %}
+							</a>
+						</p></div>
+						<div class="list-contents col-2"><p>{{ article.user.last_name }}</p></div>
+						<div class="list-contents col-2"><p>{{ article.registered_date|date:"Y-m-d" }}</p></div>
+						<div class="list-contents col-1"><p>{{ article.view_count }}</p></div>
+						<div class="list-contents col-1"><p>{{ article.like_count }}</p></div>
+					</div>
+					{% empty %}
+					<div class="row margin-10 center">
+					현재 등록된 게시물이 없습니다.
+					</div>
+					{% endfor %}
+					<div class="row">
+						<div class="col-12 margin-10 center">
+							{% if articles.has_previous %}
+							<span>
+								<a href="?page=1">&laquo; 처음</a>
+								<a href="?page={{ articles.previous_page_number }}">이전</a>
+							{% endif %}
+
+							{% for page in page_list %}
+								{% if page == articles.number %}
+									{{ page }}
+								{% else %}
+									<a href="?page={{ page}}">{{ page }}</a>
+								{% endif %}
+							{% endfor %}
+
+							{% if articles.has_next %}
+								<a href="?page={{ articles.next_page_number }}">다음</a>
+								<a href="?page={{ articles.paginator.num_pages }}">마지막 &raquo;</a>
+							{% endif %}
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12 margin-10 center">
+						<form class="form-inline" action="" method="get">
+							{%csrf_token%}
+							<div class="serching-group">
+								<select name="fd_name" id="" class="form-control">
+									<option value="title">제목</option>
+									<option value="content">본문 내용</option>
+									<option value="user__last_name">작성자</option>
+								</select>
+								<input type="text" class="form-control" name='q'>
+								<button class="btn btn-secondary" type="submit">검색</button>
+							</div>
+						</form>
+						</div>
+					</div>
+					{% if user.username  and board_category.authority <= user.is_superuser  %}
+					<div class="row">
+						<div class="col-12 right"><h6><a class = "link-a"href="{% url 'boardwrite' board_category.category_code %}">글쓰기</a></h6></div>
+					</div>
+					{% endif %}
+				{% else %}
+					<div class="row">
+						<div class="list-title col-2"><p>카테고리</p></div>
+						<div class="list-title col-4"><p>제목</p></div>
+						<div class="list-title col-2"><p>등록자</p></div>
+						<div class="list-title col-2"><p>등록일</p></div>
+						<div class="list-title col-1"><p>조회</p></div>
+						<div class="list-title col-1"><p>추천</p></div>
+					</div>
+					{% for article in articles %}
+					<div class="row">
+						<div class="list-contents col-2"><p>{{ article.category.category_name }}</p></div>
+						<div class="list-contents-title col-4"><p>
+							<a class = "link-a"href="{% url 'boardview' article.id %}">
+								{{ article.title }}
+								{% if article.reply_count > 0 %}
+								[{{ article.reply_count }}]
+								{% endif %}
+							</a>
+						</p></div>
+						<div class="list-contents col-2"><p>{{ article.user.last_name }}</p></div>
+						<div class="list-contents col-2"><p>{{ article.registered_date|date:"Y-m-d" }}</p></div>
+						<div class="list-contents col-1"><p>{{ article.view_count }}</p></div>
+						<div class="list-contents col-1"><p>{{ article.like_count }}</p></div>
+					</div>
+					{% empty %}
+					<div class="row margin-10 center">
+					현재 등록된 게시물이 없습니다.
+					</div>
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+	<div class="height-100"></div>
+{% endif %}
+{% endblock %}

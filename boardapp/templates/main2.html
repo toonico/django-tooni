@@ -1,0 +1,42 @@
+
+{% block title %}Main{% endblock %}
+
+	{% load static %}<LINK REL='STYLESHEET' HREF="{% static 'boardapp/assets/css/main.css' %}" />
+	{% load static %}<SCRIPT src="{% static 'boardapp/assets/js/jquery-3.5.1.min.js' %}" ></SCRIPT>
+
+{% block script %}
+{% endblock %}
+
+{% block content %}
+<div class="row block-center">
+	<div class="col-12 center">
+		{% load static %}<img src="{% static 'boardapp/assets/images/main.png' %}" width=600 />
+	</div>
+</div>
+
+<div class="row block-center board">
+    <div class = "col-9">
+	      <h2>최신 작품</h2>
+		    {% for article in articles %}
+              {% if article.category.category_name == "자유게시판" %}
+		         <div class="my-block">
+					{% if article.image %}
+						<a href="{% url 'boardview' article.id %}"><img src="{{ article.image_thumbnail.url }}" /></a>
+					{% endif %}
+		        		<a href="{% url 'boardview' article.id %}"><p>
+			        		{{ article.title }}<br>
+			        		{{ article.user.last_name }}
+		        		</a>
+                            {{ article.registered_date|date:"Y-m-d" }}
+	        		</p></div>
+              {% endif %}
+		    {% empty %}
+		<div class="row margin-10 center">
+		현재 등록된 게시물이 없습니다.
+		</div>		
+		{% endfor %}
+	</div>
+</div>
+<div class="height-100"></div>
+
+{% endblock %}

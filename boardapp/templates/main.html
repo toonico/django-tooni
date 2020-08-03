@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Main{% endblock %}
+
+{% block script %}
+{% endblock %}
+
+{% block content %}
+<div class="row mainboard">
+	<div class="col-12 center">
+		{% load static %}<a href="{% url 'boardlist' 'bookintro' %}"><img src="{% static 'boardapp/assets/images/main_v2.png' %}" width=1500 /></a>
+	</div>
+</div>
+
+<div class="row mainboard">
+    <div class = "col-12">
+	      <br><h3>최신 작품</h3><br>
+			<div class = "more_button">
+			<input id = mybutton type="button" value="더보기+" onClick="location.href='board_list/webtoon'"
+			style = "background-color : black; color : white ; border-radius : 10px;"></div>
+		    {% for article in articles %}
+              {% if article.category.category_code == "webtoon" %}
+		         <div class="my-block">
+					{% if article.image %}
+						<a href="{% url 'boardview' article.id %}"><img src="{{ article.image_thumbnail.url }}" /></a>
+					{% else %}
+					 	<a href="{% url 'boardview' article.id %}"> {% load static %} <img src="{% static 'boardapp/assets/images/No_image.png' %}" width="273" , height="300"/></a>
+					{% endif %}
+					 	<br>
+		        		<a class = "link-a" href="{% url 'boardview' article.id %}"><p class = "center mt-3" >
+							{{ article.title }}<a class = "link-a" href="{% url 'boardview' article.id %}">
+								<br>{{ article.user.last_name }} |</a> {{ article.registered_date|date:"Y-m-d" }}
+						</p></a></div>
+              {% endif %}
+		    {% empty %}
+		<div class="row margin-10 center">
+		현재 등록된 게시물이 없습니다.
+		</div>
+		{% endfor %}
+	</div>
+</div>
+<div class="height-100"></div>
+
+{% endblock %}

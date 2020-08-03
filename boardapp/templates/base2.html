@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<HTML LANG="KO">
+<HEAD>
+	<TITLE>{% block title %} Toonico{% endblock %}</TITLE>
+	<META charset="utf-8" />
+	{% load static %} <link href="{% static 'boardapp/assets/css/video-js.min.css' %}" rel="stylesheet">
+	{% load static %} <script src="{% static 'boardapp/assets/js/video.min.js' %}"></script>
+	{% load static %}<LINK REL='STYLESHEET' HREF="{% static 'boardapp/assets/css/my.css' %}" />
+	{% load static %}<SCRIPT src="{% static 'boardapp/assets/js/jquery-3.5.1.min.js' %}" ></SCRIPT>
+
+	{% block script %}{% endblock %}
+</HEAD>
+<BODY>
+	<DIV ID="header">
+		<DIV CLASS="logo" >
+			<DIV CLASS="row">
+				<DIV CLASS="col-8 logo-link dark-link"><A href="{% url 'main' %}">Toonico</A></DIV>
+				<DIV CLASS="col-4 center member-link dark-link">
+				{% if user.username %}
+				<A href="{% url 'password_change' %}">{{ user.last_name }} 님</A> /
+				<A href="{% url 'logout' %}">로그아웃</A>
+				{% else %}
+				<A href="{% url 'login' %}">로그인</A> /
+				<A href="{% url 'register' %}">회원가입</A>
+				{% endif %}
+                <form class="form-inline" action="{% url 'searchall' %}" method="get">
+					{%csrf_token%}
+					<div class="input-group">
+						<input type="text" class="form-control" name='q'>
+						<button class="btn btn-secondary" type="submit">검색</button>
+					</div>
+				</form>
+				</DIV>
+			</DIV>
+		</DIV>
+		<DIV CLASS="menu">
+			<DIV CLASS="row">
+				<DIV CLASS="col-2 center sideline dark-link"><A href="{% url 'main' %}">홈</A></DIV>
+                <DIV CLASS="col-2 center sideline dark-link"><A href="{% url 'boardlist' 'webtoon' %}">도전! 웹툰작가</A></DIV>
+				<DIV CLASS="col-2 center sideline dark-link"><A href="{% url 'boardlist' 'bookintro' %}">교재 소개</A></DIV>
+                <DIV CLASS="col-2 center sideline dark-link"><A href="{% url 'boardlist' 'infor' %}">자료실</A></DIV>
+                <DIV CLASS="col-2 center sideline dark-link"><A href="{% url 'boardlist' 'free' %}">자유게시판</A></DIV>
+                <DIV CLASS="col-2 center sideline dark-link"><A href="{% url 'upload' %}">수업자료등록</A></DIV>
+				<DIV CLASS="col-2 center sideline dark-link"><A href="{% url 'onlinemain' 'intro'%}">온라인클래스</A></DIV>
+				<DIV CLASS="col-2 center sideline">&nbsp;</DIV>
+			</DIV>
+		</DIV>
+	</DIV>
+	<DIV ID="container">
+		{% block content %}{% endblock %}
+	</DIV>
+	<DIV ID="footer">
+		<DIV ID="row">
+			<DIV CLASS="col-12 center">Copyright by toonico / <A href="mailto:bbum@tooni.co">Contact Us</A></DIV>
+		</DIV>
+	</DIV>
+</BODY>
+</HTML>

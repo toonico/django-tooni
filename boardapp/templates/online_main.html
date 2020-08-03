@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+
+{% block title %}Online Class{% endblock %}
+{% block script %}
+{% load static %}<script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+{% endblock %}
+{% block content %}
+
+{% if subject == "intro" %}
+    <div class="row block-center board">
+        <div class = "col-10">
+            <h3>팀장님의 인강교실</h3>
+            <p>과목 소개 글</p>
+
+            <div class="gallery">
+             <ul class="clearfix">
+               <li><div class="img">box4</div></li>
+               <li><div class="img">box5</div></li>
+               <li><div class="img">box1</div></li>
+               <li><div class="img">box2</div></li>
+               <li><div class="img">box3</div></li>
+               <li><div class="img">box4</div></li>
+               <li><div class="img">box5</div></li>
+               <li><div class="img">box1</div></li>
+             </ul>
+            </div>
+
+            <div class="g_item">
+              <ul>
+                <li class="on"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+              </ul>
+            </div>
+                {% load static %} <script>
+
+  var gall  = setInterval(galleryFun, 2000);
+  var inter = true;
+  var idx = 2;
+
+   function galleryFun(){
+
+      $(".gallery ul").animate({
+        "left":-300*idx+"px"
+      },300);
+     $(".g_item ul li").eq(idx-1).addClass("on").siblings().removeClass("on");
+     idx++;
+     if(idx> $(".gallery ul li").length-3){
+       $(".gallery ul").animate({
+         "left":0
+       },0);
+       idx=0;
+
+     }
+   }
+
+
+   $(".gallery , .g_item").hover(function(){
+     if(inter==true){
+       clearInterval(gall);
+       inter=false;
+     }
+   },function(){
+     if(inter==false){
+       gall  = setInterval(galleryFun, 2000);
+       inter=true;
+     }
+
+   });
+
+
+   $(".g_item ul li").on('click',function(){
+
+     $(this).addClass("on").siblings().removeClass("on");
+     idx = $(this).index()+1;
+     $(".gallery ul").animate({
+        "left":-300*idx+"px"
+      },1000);
+
+   });
+
+            </script>
+                {% for onmovie in onlinemovie %}
+                <div class="Prod">
+                    <div class = "sub-box detail" style = " width : 400px; height : 250px; border-style : solid; border-width : 1px; margin-top: 10px; margin-bottom : 20px; padding = 5px;">
+                        <a href = "{% url 'onlinemain' onmovie.onclass.catenum %}">{{ onmovie.movie }}
+                            <p>각 주제별 내용들</p>
+                        </a>
+                    </div>
+                    <input type="hidden" id = "detail_page" value = {{onmoive.id}}>
+                    <button id = "Add" type = "button" style = "width = 40px; hight = 20px;">구매목록추가</button>
+                    <button onClick = "location.href= '{% url 'onlinemain' onmovie.id %}' ">상세페이지</button>
+                    <a href = "{% url 'add_cart' onmovie.id %}"></a>
+
+                </div>
+                {% endfor %}
+        </div>
+    </div>
+<div class = "banner" style = "position: fixed;
+  right: 20px;
+  bottom: 50px;
+  width: 200px;
+  height: 80px;
+  background: salmon;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .6);">
+                <a href = "{% url 'payment' %}" ><p>Pay for product</p></a>
+            </div>
+            {% load static %} <script>
+              $(function() {
+
+			  var $w = $(window),
+				footerHei = $('footer').outerHeight(),
+				$banner = $('#banner');
+
+			  $w.on('scroll', function() {
+
+				var sT = $w.scrollTop();
+				var val = $(document).height() - $w.height() - footerHei;
+
+				if (sT >= val)
+					$banner.addClass('on')
+				else
+						$banner.removeClass('on')
+			  });
+			});
+        </script>
+{% elif subject == "1" %}
+   <div class="row block-center board">
+        <div class = "col-10">
+            <h2>내가수 얼굴에 붙이고 다니는 아이돌덕질 편</h2>
+             <div class="subject">
+             <ul class="clearfix">
+               <li><div class="img">box4</div></li>
+               <li><div class="img">box5</div></li>
+               <li><div class="img">box1</div></li>
+               <li><div class="img">box2</div></li>
+               <li><div class="img">box3</div></li>
+               <li><div class="img">box4</div></li>
+               <li><div class="img">box5</div></li>
+               <li><div class="img">box1</div></li>
+             </ul>
+            </div>
+
+            <div class="subject_menu">
+              <ul>
+                <li class="on"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+              </ul>
+            </div>
+                {% load static %} <script>
+
+  var gall  = setInterval(galleryFun, 2000);
+  var inter = true;
+  var idx = 2;
+
+   function galleryFun(){
+
+      $(".subject ul").animate({
+        "left":-300*idx+"px"
+      },300);
+     $(".subject_menu ul li").eq(idx-1).addClass("on").siblings().removeClass("on");
+     idx++;
+     if(idx> $(".subject ul li").length-3){
+       $(".subject ul").animate({
+         "left":0
+       },0);
+       idx=0;
+
+     }
+   }
+
+
+   $(".subject , .subject_menu").hover(function(){
+     if(inter==true){
+       clearInterval(gall);
+       inter=false;
+     }
+   },function(){
+     if(inter==false){
+       gall  = setInterval(galleryFun, 2000);
+       inter=true;
+     }
+
+   });
+
+
+   $(".g_item ul li").on('click',function(){
+
+     $(this).addClass("on").siblings().removeClass("on");
+     idx = $(this).index()+1;
+     $(".gallery ul").animate({
+        "left":-300*idx+"px"
+      },1000);
+
+   });
+
+            </script>
+                    <video id = "my-video" class="video-js vjs-default-skin vjs-big-play-button vjs-big-play-centered "webkit-playsinline="" onseeking="">
+						{% load static %}<source src = "{% static 'boardapp/assets/videos/sample_video.mp4' %}" type='video/mp4' >
+                        {% load static %} <script type="text/javascript" charset="utf-8">
+                                  var myPlayer =videojs("my-video",
+                                     {"controls":true,
+                                     "autoplay":false,
+                                     "preload": 'auto',
+                                     "poster":"//vjs.zencdn.net/v/oceans.png",
+                                     "loop":"false",
+                                     "width":600,
+                                     "height":400,
+                                     "seek" : true,
+                                     "loop" : true
+
+                                     });
+                                  myPlayer.requestFullScreen();
+                                  videojs("my-video").ready(function(){
+                                   myPlayer.src({ type: "video/mp4", src: "example.mp4" });
+                                   });
+                                  var onPlay = function(){
+                                   console.info("on Play");
+                                  };
+                                  myPlayer.on("play",onPlay);
+                                  myPlayer.onseeking = (event) => {
+                                  console.log('Video is seeking a new position.');
+                                  };
+                                 </script>
+                        {% load static %}  <style type="text/css">
+                                                    .video-js .vjs-time-control{display:block;}
+                                                    .video-js .vjs-remaining-time{display: none;}
+                                           </style>
+					<p class="vjs-no-js">
+						To view this video please enable JavaScript, and consider
+						upgrading to a web browser that
+						<a href="http://videojs.com/html5-video-support/" target="_blank">
+							supports HTML5 video
+						</a>
+					</p>
+					</video>
+            <p>영상제목</p>
+            <p>영상 설명설명설명설명설명설명설명설명설명설명설명설명</p>
+
+        </div>
+   </div>
+
+{% elif subject == "2" %}
+   <div class="row block-center board">
+        <div class = "col-10">
+마케팅도 취미처럼! <상품/제품 마케팅> 편
+        </div>
+   </div>
+{% endif %}
+
+{% endblock %}

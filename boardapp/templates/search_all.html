@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+    {% for bocate in board_category %}
+    <div>
+        {% if bocate.category_code == "webtoon" %}
+        <h2><a href = "{% url 'boardlist' bocate.category_code%}">{{ bocate.category_name }}</a> "{{ search_text }}" 로 검색된 결과</h2>
+            {% for article in articles %}
+                    {% if article.category.category_name == bocate.category_name %}
+                         <div class="my-block">
+                            {% if article.image %}
+                                <a href="{% url 'boardview' article.id %}"><img src="{{ article.image_thumbnail.url }}" /></a>
+                            {% else %}
+                                <a href="{% url 'boardview' article.id %}"> {% load static %} <img src="{% static 'boardapp/assets/images/No_image.png' %}" width="250" , height="160"/></a>
+                            {% endif %}
+                                <br><hr>
+                                <a href="{% url 'boardview' article.id %}"><p>
+                                    {{ article.title }}<br>
+                                    {{ article.user.last_name }} |</a> {{ article.registered_date|date:"Y-m-d" }}
+                            </p></div>
+                    {% endif %}
+            {% empty %}
+                <h3>No data searching</h3>
+            {% endfor %}
+         {% endif %}
+    </div>
+    {% endfor %}
+
+    {% for bocate in board_category %}
+    <div>
+        {% if bocate.category_name == "공지사항" %}
+        <h2><a href = "{% url 'boardlist' bocate.category_code%}">{{ bocate.category_name }}</a> "{{ search_text }}" 로 검색된 결과</h2>
+            {% for article in articles %}
+                {% if article.category.category_name == bocate.category_name %}
+                   <div>
+                        <a href="{% url 'boardview' article.id %}">
+                                {{ article.title }}
+                                {% if article.reply_count > 0 %}
+                                [{{ article.reply_count }}]
+                                {% endif %}
+                        </a>
+                   </div>
+                {% endif %}
+            {% empty %}
+                <h3>No data searching</h3>
+            {% endfor %}
+        {% endif %}
+    </div>
+    {% endfor %}
+{% endblock %}

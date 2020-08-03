@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Payment{% endblock %}
+{% block script %}
+{% load static %}<script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+{% load static %}<SCRIPT SRC = "{% static 'boardapp/assets/js/payment.js' %}"></SCRIPT>
+{% endblock %}
+
+{% block content %}
+ <form action="" method = "POST" id = "paymentform">
+  {% csrf_token %}
+<button id="check_module" type="button">아임 서포트 결제 모듈 테스트 해보기</button>
+{% for product in onclass %}
+<div class = "user_infor">
+    <input type = "hidden" id = "merchant_id" name = "merchant_id" value = "{{product.merchant_id}}">
+    <input type = "hidden" id = "amount" name = "amount" value = "{{product.amount}}">
+    <input type = "hidden" id = "user_name" name = "user_name" value = "{{user.last_name}}">
+    <input type = "hidden" id = "pro_name" name = "pro_name" value = "{{product.movie}}">
+    <p>상품명 : {{product.movie}}</p>
+    <p>금액 : {{product.amount}}</p>
+</div>
+{% endfor %}
+
+<div class = "charge-type">
+ <label class="control control--radio">
+        <p>결제방법</p>
+            <input type="radio" name="type" value="card" checked="checked"/>
+            신용카드
+        </label>
+        <label class="control control--radio">
+            <input type="radio" name="type" value="trans"/>
+            실시간 계좌이체
+        </label>
+        <label class="control control--radio">
+            <input type="radio" name="type" value="phone"/>
+            휴대폰
+        </label>
+        <label class="control control--radio">
+            <input type="radio" name="type" value="vbank"/>
+            가상계좌 입금
+        </label>
+</div>
+</form>
+{% if user.coupon %}
+<div class = "mycoup">
+    <button id = "Coupon" type="button">쿠폰 보기</button>
+    <div id="total_result">
+        총 결제 금액 :  <input type = "text" id = "result" value = "1000" readonly >
+    </div>
+    {% load static %} <script>
+          $("#Coupon").on('click', function (ev) {
+          var coup = window.open("/boardapp/coupon_use", "my-Test" , "width=600, height=400");
+          var formData = new FormData()
+          var amount_id =$('#amount').val();
+          amount_id = amount_id*1;
+          formData.append('amount_id', amount_id);
+          $.ajax({
+                  url: "/boardapp/coupon_use/",
+                  processData: false,
+                  contentType: false,
+                  data: formData,
+                  type: 'POST',
+                  success: function (response) {
+                    console.log('적용 성공.');
+                  },
+                  error:  function (error) {
+                    console.log('쿠폰 적용에 문제가 발생했습니다.');
+                  },
+           })
+       })
+        </script>
+</div>
+{% else %}
+<div id = "total_result_nocoup">
+    총 결제 금액 : <input id = "no-coup" type = "text" value = {{amount}} readonly>
+</div>
+{% endif %}
+{% endblock %}

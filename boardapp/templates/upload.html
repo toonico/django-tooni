@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Upload_page{% endblock %}
+{% block script %}
+{% load static %}<SCRIPT SRC = "{% static 'boardapp/assets/js/boards.js' %}"></SCRIPT>
+{% load static %}<SCRIPT SRC = "{% static 'boardapp/assets/js/upload.js' %}"></SCRIPT>
+{% if user.username == "" %}
+<SCRIPT>
+	alert('잘못된 접근입니다.');
+	location.href="{% url 'main' %}";
+</SCRIPT>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row block-center board">
+	<div class="col-10">
+        <form action="" method = "POST" id = fileUploadform">
+         {% csrf_token %}
+		<input type="hidden" id = "category_id" name="category_id" value="webtoon" />
+		<div class="row">
+			<div class="col-12"><h4>수업 이미지 등록</h4></div>
+		</div>
+		<div class="row border-top-line">
+			<div class="col-4 left"><p>작성자</p></div>
+			<div class="col-7"><p>{{ user.last_name }}</p></div>
+		</div>
+        <select name="fd_name2" id="fd_name2" class="">
+            {% for log in scuser %}
+            {% if log.user.last_name == user.last_name %}
+            <option value={{ log.school.school_name }}>{{ log.school.school_name}}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+        <select name="bookname" id = "bookname">
+            {% for bkname in bookname %}
+            <option value = {{ bkname.bookname }} > {{ bkname.bookname }} </option>
+            {% endfor %}
+        </select>
+        <select name="unit" id = "unit">
+            <option value = 01>Unit 01</option>
+            <option value = 02>Unit 02</option>
+            <option value = 03>Unit 03</option>
+            <option value = 04>Unit 04</option>
+        </select>
+        <div class = "row">
+            <div class="upload_button" id="upload_button" style="width: 100%; background-color: #000000;color: #FFFFFF;padding: 20px;margin-top: 20px;text-align: center;">파일 업로드</div>
+            <input type="file" name="files[]" id="files" multiple="multiple" accept=".gif, .jpg, .png" style=" display: none;">
+            <div class = "fileList" id="fileList" style = "width = '100px'; height = '100px;' display : inline-block;" ></div>
+            <div class="finish_button" id="finish_button" style="width:100%; background-color: #000000; color: #FFFFFF;padding: 10px; text-align: center; display: none; float: none;">게시글로 등록</div>
+        </div>
+        </form>
+	</div>
+</div>
+
+{% endblock %}
